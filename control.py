@@ -225,11 +225,50 @@ def serve(
                     logger.error(f"Unknown command: {command}")
 
 
+        async def send_some_ids():
+            IDS_TO_SEND = [
+
+                0x00000003,
+
+                0x08000001,
+                0x08000002,
+                0x08000003,
+                0x08000004,
+                0x08000005,
+
+                0x08000066,
+                0x08000067,
+                0x08000068,
+                0x08000069,
+                0x08000070,
+                0x08000071,
+
+                0x05800001,
+            ]
+
+            DELAY_MS = 500
+
+            while True:
+                await asyncio.sleep(DELAY_MS / 1000)
+                with ctx.bus() as bus:
+                    for id in IDS_TO_SEND:
+                        msg = can.Message(
+                            arbitration_id=id,
+                            data=int.to_bytes(id, 8, byteorder="big"),
+                            is_extended_id=True,
+                        )
+                        bus.send(msg)
+                        print(f"sent {id}")
+
+
         # Start the JTECU servicing task
         task_service_jtecu = asyncio.create_task(service_jtecu())
 
         # Start the command queue handling task
         task_command_queue = asyncio.create_task(handle_command_queue())
+
+        # A task to send a few random CAN IDs
+        task_send_some_ids = asyncio.create_task(send_some_ids())
 
         # Start the REST server task
         server = asyncio.create_task(app.start_server(
@@ -242,6 +281,7 @@ def serve(
             server,
             task_service_jtecu,
             task_command_queue,
+            task_send_some_ids,
         )
 
     ctx.loop.run_until_complete(run())
