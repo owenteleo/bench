@@ -10,6 +10,12 @@ Get the JTECU to go into remote mode.
 JTECU_System_Mode_Command(JTECU_NUM, SystemMode.REMOTE)
 ```
 
+# debugging can mesages
+
+```bash
+python -m can.viewer -i socketcan -c can0
+```
+
 
 # debugging with openocd and gdb
 

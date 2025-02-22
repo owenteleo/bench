@@ -1,2 +1,5 @@
-venv
+/venv
+/config.yml
+/.pytest_cache
+/.ruff_cache
 __pycache__
