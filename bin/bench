@@ -5,7 +5,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from src.configuration import ConfigurationV1 as Configuration
-from src.commands import config, serve
+from src.commands import config, monitor, serve
 
 import asyncio
 import click
@@ -143,6 +143,7 @@ def bench(
     context.obj = ctx
 
 bench.add_command(config)
+bench.add_command(monitor)
 bench.add_command(serve)
 
 if __name__ == "__main__":
